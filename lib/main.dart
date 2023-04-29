@@ -2,12 +2,42 @@ import 'package:flutter/material.dart';
 import 'ColorTheory.dart';
 import 'ColorTheoryNeutral.dart';
 import 'MatchaLogo.dart';
+import 'CameraPage.dart';
+import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:image/image.dart' as img;
+import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+void requestCameraPermission() async {
+  PermissionStatus status = await Permission.camera.status;
 
-void main() {
-  runApp(const MyApp());
+  if (status.isDenied) {
+    await Permission.camera.request();
+  }
 }
 
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    print('Error during camera initialization: ${e.code}\n${e.description}');
+  }
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ColorModel(),
+      child: MyApp(),
+    ),
+  );
+}
+/*
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
+  runApp(const MyApp());
+}
+*/
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -157,7 +187,7 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Text(
-                'Hello! Use this app to find the best combination of colors. Select what type of color you want to match below: ',
+                'Hello! Use this app to find the best combination of colors. Select what type of color you want to match below or take a picture: ',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 24),
               ),
@@ -184,6 +214,18 @@ class HomePage extends StatelessWidget {
                 backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _navigateToPage(context, CameraPage());
+              },
+              child: Text('Camera'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
               ),
             ),
           ],

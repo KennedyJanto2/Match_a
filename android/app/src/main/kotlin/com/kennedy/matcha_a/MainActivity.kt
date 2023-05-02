@@ -1,4 +1,4 @@
-package com.example.match_a
+package com.kennedy.matcha_a
 
 import io.flutter.embedding.android.FlutterActivity
 

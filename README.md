@@ -1,6 +1,11 @@
 # match_a
 
-Color combination app
+Android app for finding color combinations.
+
+Built in Android Studio using Flutter Dart.
+
+Available on the google play store now:
+https://play.google.com/store/apps/details?id=com.kennedy.match_a
 
 ## Getting Started
 
